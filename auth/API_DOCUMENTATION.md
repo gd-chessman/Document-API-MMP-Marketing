@@ -1,7 +1,7 @@
 # Tài Liệu API Xác Thực
 
 ## Tổng Quan
-Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong hệ thống.
+Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong hệ thống MMP Marketing.
 
 ## Các Endpoint API
 
@@ -25,6 +25,7 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
 - **Lưu ý**: 
   - Tạo cookie `access_token` với thời hạn từ biến môi trường `COOKIE_EXPIRES_IN`
   - Tự động tạo ví Solana nếu chưa có
+  - Mã xác thực có thời hạn 5 phút
 
 ### 2. Đăng Xuất
 - **Endpoint**: `POST http://localhost:8000/api/v1/auth/logout`
@@ -77,6 +78,7 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
 - **Lưu ý**: 
   - Tạo secret key mới cho Google Authenticator
   - Lưu secret key vào database nhưng chưa kích hoạt
+  - Mã QR có thể quét bằng ứng dụng Google Authenticator
 
 ### 5. Xác Minh Xác Thực Google
 - **Endpoint**: `POST http://localhost:8000/api/v1/auth/verify-gg-auth`
@@ -95,7 +97,9 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
     "message": "Google Authenticator verified successfully"
   }
   ```
-- **Lưu ý**: Kích hoạt xác thực 2 yếu tố sau khi xác minh thành công
+- **Lưu ý**: 
+  - Kích hoạt xác thực 2 yếu tố sau khi xác minh thành công
+  - Cho phép sai số thời gian 30 giây
 
 ### 6. Xóa Xác Thực Google
 - **Endpoint**: `DELETE http://localhost:8000/api/v1/auth/remove-gg-auth`
@@ -128,7 +132,9 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
     "message": "Email authentication added successfully"
   }
   ```
-- **Lưu ý**: Cập nhật email và trạng thái xác thực email từ Google
+- **Lưu ý**: 
+  - Cập nhật email và trạng thái xác thực email từ Google
+  - Email phải chưa được sử dụng bởi tài khoản khác
 
 ### 8. Gửi Mã Xác Minh vào Telegram để thực hiện liên kết với email
 - **Endpoint**: `GET http://localhost:8000/api/v1/auth/send-verify-email`
@@ -142,7 +148,10 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
     "message": "Verification email sent successfully"
   }
   ```
-- **Lưu ý**: Tạo và gửi mã xác thực qua Telegram
+- **Lưu ý**: 
+  - Tạo và gửi mã xác thực qua Telegram
+  - Mã xác thực có thời hạn 10 phút
+  - Yêu cầu tài khoản đã có email và Telegram ID
 
 ### 9. Xác Minh liên kết tài khoản
 - **Endpoint**: `POST http://localhost:8000/api/v1/auth/verify-code-email`
@@ -161,7 +170,33 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
     "message": "Email verified successfully"
   }
   ```
-- **Lưu ý**: Cập nhật trạng thái xác thực email sau khi xác minh thành công
+- **Lưu ý**: 
+  - Cập nhật trạng thái xác thực email sau khi xác minh thành công
+  - Mã xác thực chỉ có thể sử dụng một lần
+
+### 10. Đăng Nhập Bằng Phantom
+- **Endpoint**: `POST http://localhost:8000/api/v1/auth/login-phantom`
+- **Mô tả**: Xác thực người dùng bằng ví Phantom
+- **Dữ liệu gửi lên**:
+  ```json
+  {
+    "signature": "string",    // Chữ ký từ Phantom
+    "public_key": "string",  // Public key của ví
+    "message": "string"      // Message đã ký
+  }
+  ```
+- **Phản hồi**:
+  ```json
+  {
+    "status": true,
+    "message": "Login successful"
+  }
+  ```
+- **Lưu ý**:
+  - Message phải có định dạng "Login to MMP Platform - {timestamp}"
+  - Timestamp không được quá 2 phút
+  - Tự động tạo ví nếu chưa tồn tại
+  - Chỉ tạo JWT với wallet_id
 
 ## Các Guard Xác Thực
 Hệ thống sử dụng hai loại JWT guard:
@@ -172,4 +207,8 @@ Hệ thống sử dụng hai loại JWT guard:
 - Tất cả các endpoint yêu cầu xác thực đều sử dụng JwtGuestGuard
 - Cookie `access_token` được sử dụng để xác thực người dùng
 - Phản hồi lỗi tuân theo mã trạng thái HTTP tiêu chuẩn
-- Các thông báo lỗi được trả về dưới dạng BadRequestException 
+- Các thông báo lỗi được trả về dưới dạng BadRequestException
+- Trong môi trường production:
+  - Cookie được set với `secure: true`
+  - Cookie được set với `sameSite: 'none'`
+  - Cookie có thời hạn từ biến môi trường `COOKIE_EXPIRES_IN` 

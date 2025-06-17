@@ -16,14 +16,18 @@ Tài liệu này cung cấp chi tiết về các API quản lý ví trong hệ t
     "id": "number",
     "user_id": "number",
     "sol_address": "string",      // Địa chỉ ví Solana
-    "balance_sol": "number",      // Số dư SOL
-    "balance_mmp": "number",      // Số dư token MMP
+    "balance_sol": "number",      // Số dư SOL (độ chính xác 8 số thập phân)
+    "balance_usdt": "number",     // Số dư USDT (độ chính xác 8 số thập phân)
+    "balance_usdc": "number",     // Số dư USDC (độ chính xác 8 số thập phân)
+    "balance_mmp": "number",      // Số dư token MMP (độ chính xác 8 số thập phân)
+    "balance_mpb": "number",      // Số dư token MPB (độ chính xác 8 số thập phân)
     "created_at": "Date"          // Thời gian tạo ví
   }
   ```
 - **Lưu ý**: 
   - Trường `private_key` sẽ bị loại bỏ khỏi phản hồi (được đánh dấu @Exclude)
   - Thông tin ví được lấy từ JWT token trong cookie
+  - Tất cả các số dư đều có độ chính xác 8 số thập phân
 
 ## Cấu Trúc Dữ Liệu
 
@@ -36,7 +40,10 @@ Tài liệu này cung cấp chi tiết về các API quản lý ví trong hệ t
   sol_address: string;            // Địa chỉ ví Solana
   private_key: string;            // Private key của ví (được ẩn trong phản hồi)
   balance_sol: number;            // Số dư SOL (độ chính xác 8 số thập phân)
+  balance_usdt: number;           // Số dư USDT (độ chính xác 8 số thập phân)
+  balance_usdc: number;           // Số dư USDC (độ chính xác 8 số thập phân)
   balance_mmp: number;            // Số dư token MMP (độ chính xác 8 số thập phân)
+  balance_mpb: number;            // Số dư token MPB (độ chính xác 8 số thập phân)
   created_at: Date;               // Thời gian tạo ví
 }
 ```
@@ -44,5 +51,6 @@ Tài liệu này cung cấp chi tiết về các API quản lý ví trong hệ t
 ## Lưu Ý Chung
 - Tất cả các API đều yêu cầu xác thực thông qua JwtGuestGuard
 - Private key của ví luôn được ẩn trong phản hồi API
-- Số dư được lưu với độ chính xác 8 số thập phân
+- Tất cả các số dư đều được lưu với độ chính xác 8 số thập phân (precision: 20, scale: 8)
+- Giá trị mặc định của các số dư là 0
 - Ví được tự động tạo khi người dùng đăng ký tài khoản mới 
