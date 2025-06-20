@@ -187,7 +187,6 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
     "signature": "string",    // Chữ ký từ Phantom
     "public_key": "string",  // Public key của ví
     "message": "string",     // Message đã ký
-    "ref_code": "string"     // Mã giới thiệu (không bắt buộc)
   }
   ```
 - **Phản hồi**:
@@ -202,7 +201,6 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
   - Timestamp không được quá 2 phút
   - Tự động tạo ví nếu chưa tồn tại
   - Chỉ tạo JWT với wallet_id
-  - Nếu có ref_code hợp lệ, sẽ được lưu vào thông tin người dùng
 
 ## Các Guard Xác Thực
 Hệ thống sử dụng hai loại JWT guard:
@@ -218,4 +216,4 @@ Hệ thống sử dụng hai loại JWT guard:
   - Cookie được set với `secure: true`
   - Cookie được set với `sameSite: 'none'`
   - Cookie có thời hạn từ biến môi trường `COOKIE_EXPIRES_IN`
-- Thuộc tính `ref_code` là tùy chọn và được sử dụng cho hệ thống giới thiệu 
+- Thuộc tính `ref_code` là tùy chọn và được sử dụng cho hệ thống giới thiệu, ngoại trừ Phantom
