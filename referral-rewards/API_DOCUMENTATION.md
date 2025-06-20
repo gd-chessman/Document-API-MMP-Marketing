@@ -50,14 +50,23 @@ Tài liệu này cung cấp chi tiết về các API quản lý hệ thống gi�
     "total_reward_sol": "number",
     "total_reward_mmp": "number",
     "total_reward_mpb": "number",
-    "first_reward_date": "Date",
-    "last_reward_date": "Date"
+    "referred_wallets": [
+      {
+        "wallet_id": "number",
+        "sol_address": "string",
+        "created_at": "Date",
+        "total_reward_sol": "number",
+        "total_reward_mmp": "number",
+        "total_reward_mpb": "number"
+      }
+    ]
   }
   ```
 - **Lưu ý**: 
   - Chỉ tính các phần thưởng đã được thanh toán (PAID)
   - Tổng số người giới thiệu là số lượng ví unique đã được giới thiệu
   - Thống kê theo từng loại token thưởng
+  - Bao gồm danh sách chi tiết các ví được giới thiệu và phần thưởng tương ứng
 
 ## Hệ Thống Giới Thiệu
 
@@ -108,6 +117,20 @@ Tài liệu này cung cấp chi tiết về các API quản lý hệ thống gi�
 - **MMP**: Thưởng bằng MMP
 - **MPB**: Thưởng bằng MPB
 
+## Cấu Trúc Dữ Liệu Thống Kê
+
+### Referred Wallet Statistics
+```typescript
+{
+  wallet_id: number;              // ID của ví được giới thiệu
+  sol_address: string;            // Địa chỉ ví Solana
+  created_at: Date;               // Thời gian tạo ví
+  total_reward_sol: number;       // Tổng phần thưởng SOL từ ví này
+  total_reward_mmp: number;       // Tổng phần thưởng MMP từ ví này
+  total_reward_mpb: number;       // Tổng phần thưởng MPB từ ví này
+}
+```
+
 ## Lưu Ý Chung
 - Tất cả các API đều yêu cầu xác thực thông qua JwtGuestGuard
 - Phần thưởng được tính dựa trên số lượng token mà người được giới thiệu nhận được
@@ -116,4 +139,5 @@ Tài liệu này cung cấp chi tiết về các API quản lý hệ thống gi�
 - Mỗi swap order chỉ tạo một lần referral reward
 - Phần thưởng được gửi trực tiếp từ ví authority của hệ thống
 - Không tạo ATA cho người nhận, yêu cầu người nhận đã có ATA
-- Sử dụng authority keypair để ký các giao dịch thưởng 
+- Sử dụng authority keypair để ký các giao dịch thưởng
+- Thống kê bao gồm chi tiết từng ví được giới thiệu và phần thưởng tương ứng 
