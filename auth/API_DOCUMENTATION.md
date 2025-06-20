@@ -12,7 +12,8 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
   ```json
   {
     "id": "string",    // ID của người dùng Telegram
-    "code": "string"   // Mã xác thực từ Telegram
+    "code": "string",  // Mã xác thực từ Telegram
+    "ref_code": "string"  // Mã giới thiệu (không bắt buộc)
   }
   ```
 - **Phản hồi**:
@@ -26,6 +27,7 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
   - Tạo cookie `access_token` với thời hạn từ biến môi trường `COOKIE_EXPIRES_IN`
   - Tự động tạo ví Solana nếu chưa có
   - Mã xác thực có thời hạn 5 phút
+  - Nếu có ref_code hợp lệ, sẽ được lưu vào thông tin người dùng
 
 ### 2. Đăng Xuất
 - **Endpoint**: `POST http://localhost:8000/api/v1/auth/logout`
@@ -46,7 +48,8 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
 - **Dữ liệu gửi lên**:
   ```json
   {
-    "code": "string"  // Mã xác thực từ Google
+    "code": "string",     // Mã xác thực từ Google
+    "ref_code": "string"  // Mã giới thiệu (không bắt buộc)
   }
   ```
 - **Phản hồi**:
@@ -60,6 +63,7 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
   - Tạo cookie `access_token`
   - Tự động tạo ví Solana cho tài khoản mới
   - Lưu thông tin email và tên đầy đủ từ Google
+  - Nếu có ref_code hợp lệ, sẽ được lưu vào thông tin người dùng
 
 ### 4. Thêm Xác Thực Google
 - **Endpoint**: `POST http://localhost:8000/api/v1/auth/add-gg-auth`
@@ -182,7 +186,8 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
   {
     "signature": "string",    // Chữ ký từ Phantom
     "public_key": "string",  // Public key của ví
-    "message": "string"      // Message đã ký
+    "message": "string",     // Message đã ký
+    "ref_code": "string"     // Mã giới thiệu (không bắt buộc)
   }
   ```
 - **Phản hồi**:
@@ -197,6 +202,7 @@ Tài liệu này cung cấp chi tiết về các API xác thực có sẵn trong
   - Timestamp không được quá 2 phút
   - Tự động tạo ví nếu chưa tồn tại
   - Chỉ tạo JWT với wallet_id
+  - Nếu có ref_code hợp lệ, sẽ được lưu vào thông tin người dùng
 
 ## Các Guard Xác Thực
 Hệ thống sử dụng hai loại JWT guard:
@@ -211,4 +217,5 @@ Hệ thống sử dụng hai loại JWT guard:
 - Trong môi trường production:
   - Cookie được set với `secure: true`
   - Cookie được set với `sameSite: 'none'`
-  - Cookie có thời hạn từ biến môi trường `COOKIE_EXPIRES_IN` 
+  - Cookie có thời hạn từ biến môi trường `COOKIE_EXPIRES_IN`
+- Thuộc tính `ref_code` là tùy chọn và được sử dụng cho hệ thống giới thiệu 
