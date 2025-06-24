@@ -14,7 +14,7 @@ Tài liệu này cung cấp chi tiết về các API quản lý staking (khóa t
   {
     "staking_plan_id": "number",  // ID của gói staking
     "amount_staked": "number",    // Số lượng token MMP muốn stake
-    "lock_months": "number"       // Số tháng khóa
+    "lock_months": "number"       // Số tháng khóa (tối thiểu 1)
   }
   ```
 - **Phản hồi**:
@@ -62,7 +62,7 @@ Tài liệu này cung cấp chi tiết về các API quản lý staking (khóa t
   ```json
   {
     "amount_staked": "number",    // Số lượng token MMP muốn stake
-    "lock_months": "number"       // Số tháng khóa
+    "lock_months": "number"       // Số tháng khóa (tối thiểu 1)
   }
   ```
 - **Phản hồi**:
@@ -163,6 +163,27 @@ Tài liệu này cung cấp chi tiết về các API quản lý staking (khóa t
   - Trả về tất cả các gói stake của người dùng
   - Bao gồm cả stake đang hoạt động và đã hoàn thành
 
+### 8. Lấy Thống Kê Stake
+- **Endpoint**: `GET http://localhost:8000/api/v1/user-stakes/statistics`
+- **Mô tả**: Lấy thống kê tổng quan về stake của người dùng và toàn hệ thống
+- **Xác thực**: Yêu cầu (JwtGuestGuard)
+- **Dữ liệu gửi lên**: Không có
+- **Phản hồi**:
+  ```json
+  {
+    "total_staked_mmp": "number",           // Tổng số MMP đã stake của người dùng
+    "active_stakers_count": "number",       // Số lượng người đang stake trong hệ thống
+    "total_staked_this_month": "number",    // Tổng stake tháng này của người dùng
+    "total_staked_last_month": "number",    // Tổng stake tháng trước của người dùng
+    "total_claimed_this_month": "number",   // Tổng claim tháng này của người dùng
+    "total_claimed_last_month": "number"    // Tổng claim tháng trước của người dùng
+  }
+  ```
+- **Lưu ý**: 
+  - Thống kê theo tháng hiện tại và tháng trước
+  - Chỉ tính các stake có trạng thái ACTIVE cho active_stakers_count
+  - Tổng stake và claim được tính theo thời gian tạo và cập nhật
+
 ## Trạng Thái User Stake
 - **ACTIVE**: Đang hoạt động (chưa hết thời gian khóa)
 - **COMPLETED**: Đã hoàn thành (đã unstake)
@@ -213,4 +234,5 @@ Tài liệu này cung cấp chi tiết về các API quản lý staking (khóa t
 - Giao dịch được thực hiện trên blockchain Solana
 - Sử dụng Borsh serialization cho instruction data
 - Tự động tạo PDA cho mỗi stake
-- Hỗ trợ nhiều gói staking khác nhau 
+- Hỗ trợ nhiều gói staking khác nhau
+- Thống kê được tính theo tháng và chỉ bao gồm các giao dịch hợp lệ 
