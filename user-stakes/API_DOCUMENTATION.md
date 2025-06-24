@@ -146,7 +146,16 @@ Tài liệu này cung cấp chi tiết về các API quản lý staking (khóa t
       "end_date": "Date",
       "status": "string",
       "created_at": "Date",
-      "updated_at": "Date"
+      "updated_at": "Date",
+      "staking_plan": {
+        "id": "number",
+        "name": "string",
+        "interest_rate": "number",
+        "period_days": "number",
+        "is_active": "boolean",
+        "created_at": "Date",
+        "updated_at": "Date"
+      },
     }
   ]
   ```
