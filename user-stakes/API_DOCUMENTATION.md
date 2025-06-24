@@ -14,7 +14,7 @@ Tài liệu này cung cấp chi tiết về các API quản lý staking (khóa t
   {
     "staking_plan_id": "number",  // ID của gói staking
     "amount_staked": "number",    // Số lượng token MMP muốn stake
-    "lock_months": "number"       // Số tháng khóa (tối thiểu 1)
+    "lock_months": "number"       // Số tháng khóa
   }
   ```
 - **Phản hồi**:
@@ -62,7 +62,7 @@ Tài liệu này cung cấp chi tiết về các API quản lý staking (khóa t
   ```json
   {
     "amount_staked": "number",    // Số lượng token MMP muốn stake
-    "lock_months": "number"       // Số tháng khóa (tối thiểu 1)
+    "lock_months": "number"       // Số tháng khóa
   }
   ```
 - **Phản hồi**:
