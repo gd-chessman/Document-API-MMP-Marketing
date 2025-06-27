@@ -38,7 +38,42 @@ Tài liệu này cung cấp chi tiết về các API quản lý hệ thống gi�
   - Bao gồm thông tin ví của người được giới thiệu
   - Sắp xếp theo thời gian tạo giảm dần
 
-### 2. Lấy Thống Kê Giới Thiệu
+### 2. Lấy Danh Sách Phần Thưởng Theo Địa Chỉ Ví
+- **Endpoint**: `GET http://localhost:8000/api/v1/referral-rewards/by-address/:walletAddress`
+- **Mô tả**: Lấy danh sách các phần thưởng giới thiệu theo địa chỉ ví cụ thể
+- **Xác thực**: Yêu cầu (JwtGuestGuard)
+- **Path Parameters**:
+  - `walletAddress`: Địa chỉ ví Solana cần tra cứu
+- **Query Parameters**:
+  - `page`: Số trang (mặc định: 1)
+  - `limit`: Số lượng giao dịch mỗi trang (mặc định: 50)
+- **Phản hồi**:
+  ```json
+  {
+    "data": [
+      {
+        "id": "number",
+        "reward_amount": "number",
+        "reward_token": "string",
+        "status": "string",
+        "tx_hash": "string",
+        "created_at": "Date",
+        "referred_wallet": {
+          "sol_address": "string"
+        }
+      }
+    ],
+    "total": "number",
+    "page": "number",
+    "limit": "number"
+  }
+  ```
+- **Lưu ý**: 
+  - Chỉ trả về các phần thưởng có trạng thái PAID
+  - Tra cứu theo địa chỉ ví Solana cụ thể
+  - Sắp xếp theo thời gian tạo giảm dần
+
+### 3. Lấy Thống Kê Giới Thiệu
 - **Endpoint**: `GET http://localhost:8000/api/v1/referral-rewards/statistics`
 - **Mô tả**: Lấy thống kê tổng quan về hệ thống giới thiệu
 - **Xác thực**: Yêu cầu (JwtGuestGuard)
@@ -140,4 +175,5 @@ Tài liệu này cung cấp chi tiết về các API quản lý hệ thống gi�
 - Phần thưởng được gửi trực tiếp từ ví authority của hệ thống
 - Không tạo ATA cho người nhận, yêu cầu người nhận đã có ATA
 - Sử dụng authority keypair để ký các giao dịch thưởng
-- Thống kê bao gồm chi tiết từng ví được giới thiệu và phần thưởng tương ứng 
+- Thống kê bao gồm chi tiết từng ví được giới thiệu và phần thưởng tương ứng
+- Endpoint by-address cho phép tra cứu phần thưởng của bất kỳ ví nào trong hệ thống 
